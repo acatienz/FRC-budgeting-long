@@ -161,7 +161,7 @@ def tax_increacse_section():
     elif ((user_id == 'PP' or user_id=='M') or user_id =='FP') and round == 1:
         st.header("Determine tax rate for this round")
         st.markdown('The ' + auth_name_dict[user_id] + ' is set to 1 budget unit for the first round \n'
-                                                       'you will get a chance to increase it in the next rounds')
+                                                       'you will get a chance to increase it starting next round')
     else:
         st.info('We are waiting to hear from our government officials about the tax rate')
 
@@ -179,7 +179,7 @@ def taxes_section():
             conn.commit()
             with st.spinner('Depositing taxes'):
                 time.sleep(2)
-            st.success('You payed your taxes :)')
+            st.success('You paid your taxes :)')
             time.sleep(2)
             st.experimental_rerun()
 
@@ -198,7 +198,7 @@ def taxes_section():
             conn.commit()
             with st.spinner('Depositing taxes'):
                 time.sleep(2)
-            st.success('You payed your taxes :)')
+            st.success('You paid your taxes :)')
             time.sleep(2)
             st.experimental_rerun()
 
@@ -392,7 +392,7 @@ def taxes_section():
             with col2:
                 st.metric(label='Mandatory payment to hydrologist',value=2)
             with col3:
-                st.metric(label='Mandetory payment to transport authority', value=2)
+                st.metric(label='Mandatory payment to transport authority', value=2)
 
             confirm_m_payment = st.button(label='Process mandatory payments')
             if confirm_m_payment:
@@ -439,8 +439,8 @@ def bidding_section():
                         'r' + str(round) + '_bid'].to_list()])
         if measure in df['r' + str(round) + '_measure'].to_list() and bid_total + amount > df_m.loc[measure,'cost']:
 
-            st.error('The amount you are bidding will increase the total bid ve the cost of measure, consider changing your bid to ' + str(int(df_m.loc[measure,'cost']-bid_total)) +
-                     ' or less, or alternatively bid on a different measure')
+            st.error('The amount you are bidding will increase the total bid past the cost of the measure. Consider changing your bid to ' + str(int(df_m.loc[measure,'cost']-bid_total)) +
+                     ' or less. Alternatively, you could bid on a different measure.')
             time.sleep(3)
             st.experimental_rerun()
 
@@ -459,7 +459,7 @@ def bidding_section():
             time.sleep(2)
             st.experimental_rerun()
 
-    st.header('Biding on features')
+    st.header('Bidding on features')
     col1_f, col2_f, col3_f = st.columns(3)
 
     with col1_f:
@@ -494,7 +494,7 @@ def bidding_section():
                     st.progress(int(sum([int(i) for i in df[df['r' + str(round) + '_measure'] == measure][
                         'r' + str(round) + '_bid'].to_list()]) / df_m.loc[measure, 'cost'] * 100))
                 except:
-                    st.warning('The bid on this measure have exceeded the cost')
+                    st.warning('The bids on this measure have exceeded the cost')
 
 
 
@@ -535,7 +535,7 @@ def transaction_section():
         df_m_log = pd.read_sql("SELECT * from measure_log;",conn)
         est = pytz.timezone('EST')
         df_m_log = df_m_log.rename(
-            columns={'datetime': 'Timestamp', 'bid_type': 'Type of bid', 'person_biding': 'Role of bidder',
+            columns={'datetime': 'Timestamp', 'bid_type': 'Type of bid', 'person_bidding': 'Role of bidder',
                      'amount': 'Amount of bid', 'measure': 'Measure'})
         if not df_m_log.empty:
             df_m_log['Timestamp'] = df_m_log['Timestamp'].dt.tz_convert('EST').dt.strftime('%B %d, %Y, %r')
@@ -623,11 +623,11 @@ def flood():
             if not df.loc[user_id,'r'+str(round)+'_insurance']:
                 st.warning('Unfortunately, you were not insured for this round')
                 if user_id in qulified_for_DRP:
-                    st.success('You are eligible for DRP rebate of 3 budget units, admin will process your rebate')
+                    st.success('You are eligible for DRP rebate of 3 budget units. Admin will process your rebate')
                 else:
-                    st.warning('Unfortunately you are not eligible for DRP')
+                    st.warning('Unfortunately, you are not eligible for DRP')
             else:
-                st.success('You were insured for this round, you will receive 3/4 of the total damge. The admin will process your claim')
+                st.success('You were insured for this round, so you will receive 3/4 of the total damage cost in $. The admin will process your claim')
 
     else:
         st.success('You are not affected by the flood')
